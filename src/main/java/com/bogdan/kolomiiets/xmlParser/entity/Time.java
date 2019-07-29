@@ -88,51 +88,158 @@ public class Time {
         this.clouds = clouds;
     }
 
-    class Symbol {
+    @Override
+    public String toString() {
+        return "\n\tTime{" +
+                "day=" + (day != null ? day.get(Calendar.YEAR) + "-" + (day.get(Calendar.MONTH) + 1)+ "-" + day.get(Calendar.DATE) : "") +
+                ", " + symbol +
+                ", " + precipitation +
+                ", " + windDirection +
+                ", " + windSpeed +
+                ", \n\t" + temperature +
+                ", " + pressure +
+                ", " + humidity +
+                ", " + clouds +
+                '}';
+    }
+
+    public class Symbol {
         private String var;
         private String name;
         private int number;
 
-        public Symbol(String var, String name, int number) {
+        public String getVar() {
+            return var;
+        }
+
+        public void setVar(String var) {
             this.var = var;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
             this.name = name;
+        }
+
+        public int getNumber() {
+            return number;
+        }
+
+        public void setNumber(int number) {
             this.number = number;
+        }
+
+        @Override
+        public String toString() {
+            return "Symbol{" +
+                    "var='" + var + '\'' +
+                    ", name='" + name + '\'' +
+                    ", number=" + number +
+                    '}';
         }
     }
 
-    class Precipitation{
+    public class Precipitation{
         private String type;
         private double value;
 
-        public Precipitation(String type, double value) {
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
             this.type = type;
+        }
+
+        public double getValue() {
+            return value;
+        }
+
+        public void setValue(double value) {
             this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return "Precipitation{" +
+                    "type='" + type + '\'' +
+                    ", value=" + value +
+                    '}';
         }
     }
 
-    class WindDirection {
+    public class WindDirection {
         private String name;
         private String code;
         private int deg;
 
-        public WindDirection(String name, String code, int deg) {
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
             this.name = name;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
             this.code = code;
+        }
+
+        public int getDeg() {
+            return deg;
+        }
+
+        public void setDeg(int deg) {
             this.deg = deg;
+        }
+
+        @Override
+        public String toString() {
+            return "WindDirection{" +
+                    "name='" + name + '\'' +
+                    ", code='" + code + '\'' +
+                    ", deg=" + deg +
+                    '}';
         }
     }
 
-    class WindSpeed {
+    public class WindSpeed {
         private String name;
         private double mps;
 
-        public WindSpeed(String name, double mps) {
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
             this.name = name;
+        }
+
+        public double getMps() {
+            return mps;
+        }
+
+        public void setMps(double mps) {
             this.mps = mps;
+        }
+
+        @Override
+        public String toString() {
+            return "WindSpeed{" +
+                    "name='" + name + '\'' +
+                    ", mps=" + mps +
+                    '}';
         }
     }
 
-    class Temperature {
+    public class Temperature {
         private double day;
         private double morn;
         private double eve;
@@ -140,45 +247,161 @@ public class Time {
         private double max;
         private double min;
 
-        public Temperature(double day, double morn, double eve, double night, double max, double min) {
+        public double getDay() {
+            return day;
+        }
+
+        public void setDay(double day) {
             this.day = day;
+        }
+
+        public double getMorn() {
+            return morn;
+        }
+
+        public void setMorn(double morn) {
             this.morn = morn;
+        }
+
+        public double getEve() {
+            return eve;
+        }
+
+        public void setEve(double eve) {
             this.eve = eve;
+        }
+
+        public double getNight() {
+            return night;
+        }
+
+        public void setNight(double night) {
             this.night = night;
+        }
+
+        public double getMax() {
+            return max;
+        }
+
+        public void setMax(double max) {
             this.max = max;
+        }
+
+        public double getMin() {
+            return min;
+        }
+
+        public void setMin(double min) {
             this.min = min;
+        }
+
+        @Override
+        public String toString() {
+            return "Temperature{" +
+                    "day=" + day +
+                    ", morn=" + morn +
+                    ", eve=" + eve +
+                    ", night=" + night +
+                    ", max=" + max +
+                    ", min=" + min +
+                    '}';
         }
     }
 
-    class Pressure{
+    public class Pressure{
         private double value;
         private String unit;
 
-        public Pressure(double value, String unit) {
+        public double getValue() {
+            return value;
+        }
+
+        public void setValue(double value) {
             this.value = value;
+        }
+
+        public String getUnit() {
+            return unit;
+        }
+
+        public void setUnit(String unit) {
             this.unit = unit;
+        }
+
+        @Override
+        public String toString() {
+            return "Pressure{" +
+                    "value=" + value +
+                    ", unit='" + unit + '\'' +
+                    '}';
         }
     }
 
-    class Humidity{
+    public class Humidity{
         private int value;
         private String unit;
 
-        public Humidity(int value, String unit) {
+        public int getValue() {
+            return value;
+        }
+
+        public void setValue(int value) {
             this.value = value;
+        }
+
+        public String getUnit() {
+            return unit;
+        }
+
+        public void setUnit(String unit) {
             this.unit = unit;
+        }
+
+        @Override
+        public String toString() {
+            return "Humidity{" +
+                    "value=" + value +
+                    ", unit='" + unit + '\'' +
+                    '}';
         }
     }
 
-    class Clouds {
+    public class Clouds {
         private String value;
         private String unit;
         private int all;
 
-        public Clouds(String value, String unit, int all) {
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
             this.value = value;
+        }
+
+        public String getUnit() {
+            return unit;
+        }
+
+        public void setUnit(String unit) {
             this.unit = unit;
+        }
+
+        public int getAll() {
+            return all;
+        }
+
+        public void setAll(int all) {
             this.all = all;
+        }
+
+        @Override
+        public String toString() {
+            return "Clouds{" +
+                    "value='" + value + '\'' +
+                    ", unit='" + unit + '\'' +
+                    ", all=" + all +
+                    '}';
         }
     }
 }

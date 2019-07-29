@@ -10,9 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
+import java.util.*;
 
 public class WeatherDataParser {
     private WeatherData weatherData;
@@ -31,9 +29,9 @@ public class WeatherDataParser {
         try(InputStream inputStream = ClassLoader.getSystemResourceAsStream(fileName)) {
             //getting document builder
             documentBuilder = documentBuilderFactory.newDocumentBuilder();
-
             //build document
             document = documentBuilder.parse(inputStream);
+
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -49,6 +47,8 @@ public class WeatherDataParser {
         Element root = document.getDocumentElement();
         if (root.getNodeName().equals("weatherdata")) {
             weatherData = new WeatherData();
+            weatherData.setXmlVersion(document.getXmlVersion());
+            weatherData.setEncoding(document.getXmlEncoding());
         } else {
             System.out.println("Attention, root element is incorrect!!!");
             return;
@@ -137,8 +137,97 @@ public class WeatherDataParser {
         return sun;
     }
 
-    private Forecast parseForecast(Node item) {
+    private Forecast parseForecast(Node nodeForecast) {
         Forecast forecast = new Forecast();
+        List<Time> timeList = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        if (nodeForecast != null) {
+            NodeList nodeList = nodeForecast.getChildNodes();
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                if (nodeList.item(i) instanceof Element) {
+                    Element element = (Element) nodeList.item(i);
+                    Calendar calendar = Calendar.getInstance();
+
+                    //new Time instance
+                    Time time = new Time();
+
+                    //getting day attributes from element
+                    try {
+                        calendar.setTime(sdf.parse(element.getAttribute("day")));
+                        time.setDay(calendar);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    NodeList list = element.getChildNodes();
+                    for (int j = 0; j < list.getLength(); j++) {
+                        if (list.item(j) instanceof Element) {
+                            Element localElement = (Element) list.item(j);
+                            if (localElement.hasAttributes()) {
+                                if (localElement.getTagName().equals("symbol")) {
+                                    Time.Symbol symbol = time.new Symbol();
+                                    symbol.setVar(localElement.getAttribute("var"));
+                                    symbol.setName(localElement.getAttribute("name"));
+                                    symbol.setNumber(Integer.parseInt(localElement.getAttribute("number")));
+                                    time.setSymbol(symbol);
+                                }
+                                if (localElement.getTagName().equals("precipitation")) {
+                                    Time.Precipitation precipitation = time.new Precipitation();
+                                    precipitation.setType(localElement.getAttribute("type"));
+                                    precipitation.setValue(Double.parseDouble(localElement.getAttribute("value")));
+                                    time.setPrecipitation(precipitation);
+                                }
+                                if (localElement.getTagName().equals("windDirection")){
+                                    Time.WindDirection windDirection = time.new WindDirection();
+                                    windDirection.setName(localElement.getAttribute("name"));
+                                    windDirection.setCode(localElement.getAttribute("code"));
+                                    windDirection.setDeg(Integer.parseInt(localElement.getAttribute("deg")));
+                                    time.setWindDirection(windDirection);
+                                }
+                                if (localElement.getTagName().equals("windSpeed")){
+                                    Time.WindSpeed windSpeed = time.new WindSpeed();
+                                    windSpeed.setName(localElement.getAttribute("name"));
+                                    windSpeed.setMps(Double.parseDouble(localElement.getAttribute("mps")));
+                                    time.setWindSpeed(windSpeed);
+                                }
+                                if (localElement.getTagName().equals("temperature")){
+                                    Time.Temperature temperature = time.new Temperature();
+                                    temperature.setDay(Double.parseDouble(localElement.getAttribute("day")));
+                                    temperature.setMorn(Double.parseDouble(localElement.getAttribute("morn")));
+                                    temperature.setEve(Double.parseDouble(localElement.getAttribute("eve")));
+                                    temperature.setNight(Double.parseDouble(localElement.getAttribute("night")));
+                                    temperature.setMax(Double.parseDouble(localElement.getAttribute("max")));
+                                    temperature.setMin(Double.parseDouble(localElement.getAttribute("min")));
+                                    time.setTemperature(temperature);
+                                }
+                                if (localElement.getTagName().equals("pressure")){
+                                    Time.Pressure pressure = time.new Pressure();
+                                    pressure.setValue(Double.parseDouble(localElement.getAttribute("value")));
+                                    pressure.setUnit(localElement.getAttribute("unit"));
+                                    time.setPressure(pressure);
+                                }
+                                if (localElement.getTagName().equals("humidity")){
+                                    Time.Humidity humidity = time.new Humidity();
+                                    humidity.setValue(Integer.parseInt(localElement.getAttribute("value")));
+                                    humidity.setUnit(localElement.getAttribute("unit"));
+                                    time.setHumidity(humidity);
+                                }
+                                if (localElement.getTagName().equals("clouds")){
+                                    Time.Clouds clouds = time.new Clouds();
+                                    clouds.setValue(localElement.getAttribute("value"));
+                                    clouds.setUnit(localElement.getAttribute("unit"));
+                                    clouds.setAll(Integer.parseInt(localElement.getAttribute("all")));
+                                    time.setClouds(clouds);
+                                }
+                            }
+                        }
+                    }
+                    timeList.add(time);
+                }
+            }
+        }
+        forecast.setTime(timeList);
         return forecast;
     }
 }

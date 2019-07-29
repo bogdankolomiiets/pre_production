@@ -1,27 +1,25 @@
 package com.bogdan.kolomiiets.xmlParser.entity;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Forecast {
-    private Time time;
+    private List<Time> timeList;
 
     public Forecast() {
     }
 
-    public Forecast(Time time) {
-        this.time = time;
+    public List<Time> getTime() {
+        return timeList;
     }
 
-    public Time getTime() {
-        return time;
-    }
-
-    public void setTime(Time time) {
-        this.time = time;
+    public void setTime(List timeList) {
+        this.timeList = timeList;
     }
 
     @Override
     public String toString() {
         return "Forecast{" +
-                "time=" + time +
-                '}';
+                timeList + '}';
     }
 }
