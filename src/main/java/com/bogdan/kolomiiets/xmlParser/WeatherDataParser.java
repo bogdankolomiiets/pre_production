@@ -6,6 +6,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
@@ -19,6 +20,9 @@ public class WeatherDataParser {
         WeatherDataParser weatherDataParser = new WeatherDataParser();
         weatherDataParser.parseXML("XMLtoParse.xml");
         System.out.println(weatherDataParser.weatherData);
+        System.out.println("===================================================");
+        File file = WeatherDataExporter.exportWeatherDataToXML("WeatherDataExp.xml", weatherDataParser.weatherData);
+
     }
 
     public void parseXML(String fileName) {
